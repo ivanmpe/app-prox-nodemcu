@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+       Wifi Scanner
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list >
+      <ion-item *ngFor="let x of data" (tap)="pass(x.SSID)">
+        <ion-avatar item-start>
+          <img src="https://image.freepik.com/free-icon/wifi_318-1573.jpg">
+        </ion-avatar >
+        <p>{{x.SSID}}</p> - 
+        <p>{{x.BSSID}}</p> - 
+        <p>{{x.level}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
