@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { Hotspot, HotspotNetwork } from '@ionic-native/hotspot';
 
 @Component({
   selector: 'page-about',
@@ -7,8 +8,22 @@ import { NavController } from 'ionic-angular';
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController) {
+  data = [];
+  public redes = []
 
+  constructor(public navCtrl: NavController, private hotspot: Hotspot) {
+
+  }
+  ionViewDidLoad() {
+    this.rescan();
+  }
+  rescan() {
+    this.hotspot.scanWifiByLevel().then((networks: Array<HotspotNetwork>) => {
+
+      this.data = networks;
+
+
+    })
   }
 
 }

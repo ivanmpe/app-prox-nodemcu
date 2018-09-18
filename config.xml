@@ -85,8 +85,6 @@
     <plugin name="org.apache.cordova.signal-strength" spec="https://github.com/petervojtek/cordova-plugin-signal-strength.git" />
     <plugin name="cordova-plugin-hotspot" spec="^1.2.10" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
-    <plugin name="wifiwizard2" spec="https://github.com/tripflex/wifiwizard2" />
-    <plugin name="com.pylonproducts.wifiwizard" spec="https://github.com/hoerresb/WifiWizard" />
     <plugin name="cordova-plugin-android-wifi-manager" spec="^1.2.1" />
     <engine name="android" spec="7.0.0" />
 </widget>

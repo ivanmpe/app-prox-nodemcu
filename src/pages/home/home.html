@@ -1,20 +1,22 @@
 <ion-header>
     <ion-navbar>
       <ion-title>
-       Wifi Scanner
+        Proximidade ESP8266
       </ion-title>
     </ion-navbar>
   </ion-header>
   
   <ion-content>
+    <button ion-button class="register" (click)="rescan()"> rescan </button>
+
+    <p> Nodemcu1 : {{levelNodemcu1}}</p>
     <ion-list >
-      <ion-item *ngFor="let x of data" (tap)="pass(x.SSID)">
+      <ion-item no-lines *ngFor="let wifi of data " >
         <ion-avatar item-start>
-          <img src="https://image.freepik.com/free-icon/wifi_318-1573.jpg">
         </ion-avatar >
-        <p>{{x.SSID}}</p> - 
-        <p>{{x.BSSID}}</p> - 
-        <p>{{x.level}}</p>
+        <p  *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'" >{{wifi.SSID}}</p>  
+        <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'" >{{wifi.BSSID}}</p>  
+        <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'"  >{{wifi.level}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

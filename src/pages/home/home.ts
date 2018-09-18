@@ -1,62 +1,170 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, Platform } from 'ionic-angular';
 import { Hotspot, HotspotNetwork } from '@ionic-native/hotspot';
+import { Paho } from 'ng2-mqtt/mqttws31';
+import { ToastController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  data: any;
-  constructor(private platform: Platform, public navCtrl: NavController, private hotspot: Hotspot, public alertCtrl: AlertController) {
-    this.platform.registerBackButtonAction(() => {
-      
-    });
+
+
+  data = [];
+  levelNodemcu1;
+  public redes = []
+
+  host = 'm13.cloudmqtt.com';
+  path = '/mqtt';
+  port = 33728;
+  client;
+  level1: any;
+
+
+  options = {
+    useSSL: true,
+    userName: "xmvxeajy",
+    password: "_rdhkvlq9-aB",
+    onSuccess: this.onConnected.bind(this)
+  }
+
+
+  constructor(private platform: Platform, public navCtrl: NavController, private hotspot: Hotspot,
+    public toastCtrl: ToastController) {
+      hotspot.startWifiPeriodicallyScan(3000, Number.MAX_SAFE_INTEGER).then((data) => {
+        this.rescan();
+      }, (error) => {
+        console.log(".........hotspot..........", error);
+      })
   }
 
   ionViewDidLoad() {
-    this.hotspot.scanWifiByLevel().then((networks: Array<HotspotNetwork>) => {
-      this.data = networks;
-      var ue = this.data.level;
-      console.log(".........hotspot..........", JSON.stringify(networks));
-    });
+    //    this.hotspot.startWifiPeriodicallyScan(1000, 1440000) 
+    this.client = new Paho.MQTT.Client(this.host, this.port, this.path);
+    this.client.connect(this.options);
+    this.onMessage();
+  //  this.rescan();
+  
+
+
+
+}
+  subscribe() {
+    var topic = "nodemcu1/led";
+    var qos = 0;
+    this.client.subscribe(topic, { qos: qos });
   }
 
-  pass(SSID) {
+  onConnected() {
+    // this.client.subscribe("sensor/temperatura");
+    this.subscribe();
+    this.presentToast('mqtt conectado');
+  }
 
-    let prompt = this.alertCtrl.create({
-      title: SSID,
-      message: "Enter a name for this new album you're so keen on adding",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: Password => {
+  sendMessage(message: string) {
+    let packet = new Paho.MQTT.Message(message);
+    packet.destinationName = "nodemcu1/led";
+    this.client.send(packet);
+  }
 
-            console.log("password", Password.title, SSID);
-            this.hotspot.connectToWifi(SSID, Password)
-              .then((data) => {
 
-                console.log(".........hotspot..........", data);
-              }, (error) => {
-                console.log(".........hotspot..........", error);
-              })
+  onMessage() {
 
+    /*this.client.onMessageArrived = (message: Paho.MQTT.Message) => {
+      console.log("Message Arrived: " + message.payloadString);
+      console.log("Topic: " + message.destinationName);
+      console.log("QoS: " + message.qos);
+      console.log("Retained: " + message.retained);
+
+      if (message.destinationName == 'sensor/temperatura') {
+        this.temperatura = message.payloadString
+      } else if (message.destinationName == 'sensor/umidade') {
+        this.umidade = message.payloadString
+      }
+    };*/
+  }
+
+
+  onConnectionLost() {
+    this.client.onConnectionLost = (responseObject: Object) => {
+      this.presentToast('Connection lost : ' + JSON.stringify(responseObject));
+      console.log('Connection lost : ' + JSON.stringify(responseObject));
+    };
+  }
+
+  presentToast(msg: string) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+
+  rescan() {
+    this.hotspot.scanWifiByLevel().then((networks: Array<HotspotNetwork>) => {
+
+      this.data = networks;
+      var i: number;
+      for (i = 0; i < this.data.length - 1; i++) {
+        if (this.data[i].BSSID == '2e:3a:e8:08:e9:d0') {
+          this.levelNodemcu1 = this.data[i].level
+          if (this.levelNodemcu1 > -60) {
+            this.sendMessage("0");
+          } else {
+            this.sendMessage("1");
           }
         }
-      ]
-    });
-    prompt.present();
+      }
+
+
+    })
+
+
+
+
   }
+
+
+
 }
+
+/*
+      pass(SSID) {
+    
+        let prompt = this.alertCtrl.create({
+          title: SSID,
+          message: "Enter a name for this new album you're so keen on adding",
+          inputs: [
+            {
+              name: 'title',
+              placeholder: 'Title'
+            },
+          ],
+          buttons: [
+            {
+              text: 'Cancel',
+              handler: data => {
+                console.log('Cancel clicked');
+              }
+            },
+            {
+              text: 'Save',
+              handler: Password => {
+    
+                console.log("password", Password.title, SSID);
+                this.hotspot.connectToWifi(SSID, Password)
+                  .then((data) => {
+    
+                    console.log(".........hotspot..........", data);
+                  }, (error) => {
+                    console.log(".........hotspot..........", error);
+                  })
+    
+              }
+            }
+          ]
+        });
+        prompt.present();
+      }*/
