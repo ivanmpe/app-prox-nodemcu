@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController, Platform } from 'ionic-angular';
+import {  NavController, Platform } from 'ionic-angular';
 import { Hotspot, HotspotNetwork } from '@ionic-native/hotspot';
 import { Paho } from 'ng2-mqtt/mqttws31';
 import { ToastController } from 'ionic-angular';
+import { interval } from 'rxjs/observable/interval';
 
 @Component({
   selector: 'page-home',
@@ -14,13 +15,13 @@ export class HomePage {
   data = [];
   levelNodemcu1;
   public redes = []
-
+  sub;
   host = 'm13.cloudmqtt.com';
   path = '/mqtt';
   port = 33728;
   client;
   level1: any;
-
+  distancia: number 
 
   options = {
     useSSL: true,
@@ -28,28 +29,19 @@ export class HomePage {
     password: "_rdhkvlq9-aB",
     onSuccess: this.onConnected.bind(this)
   }
-
-
   constructor(private platform: Platform, public navCtrl: NavController, private hotspot: Hotspot,
     public toastCtrl: ToastController) {
-      hotspot.startWifiPeriodicallyScan(3000, Number.MAX_SAFE_INTEGER).then((data) => {
-        this.rescan();
-      }, (error) => {
-        console.log(".........hotspot..........", error);
-      })
-  }
+      setInterval(() => { 
+        this.rescan(); 
+     }, 3000);
+    }
 
   ionViewDidLoad() {
-    //    this.hotspot.startWifiPeriodicallyScan(1000, 1440000) 
     this.client = new Paho.MQTT.Client(this.host, this.port, this.path);
     this.client.connect(this.options);
-    this.onMessage();
-  //  this.rescan();
-  
+  }
 
 
-
-}
   subscribe() {
     var topic = "nodemcu1/led";
     var qos = 0;
@@ -57,7 +49,6 @@ export class HomePage {
   }
 
   onConnected() {
-    // this.client.subscribe("sensor/temperatura");
     this.subscribe();
     this.presentToast('mqtt conectado');
   }
@@ -71,18 +62,18 @@ export class HomePage {
 
   onMessage() {
 
-    /*this.client.onMessageArrived = (message: Paho.MQTT.Message) => {
+    this.client.onMessageArrived = (message: Paho.MQTT.Message) => {
       console.log("Message Arrived: " + message.payloadString);
       console.log("Topic: " + message.destinationName);
       console.log("QoS: " + message.qos);
       console.log("Retained: " + message.retained);
 
       if (message.destinationName == 'sensor/temperatura') {
-        this.temperatura = message.payloadString
+      //  this.temperatura = message.payloadString
       } else if (message.destinationName == 'sensor/umidade') {
-        this.umidade = message.payloadString
+      //  this.umidade = message.payloadString
       }
-    };*/
+    };
   }
 
 
@@ -110,18 +101,26 @@ export class HomePage {
       for (i = 0; i < this.data.length - 1; i++) {
         if (this.data[i].BSSID == '2e:3a:e8:08:e9:d0') {
           this.levelNodemcu1 = this.data[i].level
-          if (this.levelNodemcu1 > -60) {
+      
+          if (this.levelNodemcu1 > -70) {
             this.sendMessage("0");
           } else {
             this.sendMessage("1");
           }
         }
       }
-
+      
 
     })
 
 
+    /*
+     hotspot.startWifiPeriodicallyScan(3000, Number.MAX_SAFE_INTEGER).then((data) => {
+      this.rescan();
+    }, (error) => {
+      console.log(".........hotspot..........", error);
+    })*/
+  
 
 
   }
