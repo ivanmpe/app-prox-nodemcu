@@ -1,21 +1,19 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="tab">
     <ion-title>
-      Redes
+      Scan Redes
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    <button ion-button class="register" (click)="rescan()"> rescan </button>
-
-  <ion-list >
-    <ion-item no-lines *ngFor="let wifi of data " >
+<ion-content padding class="background">
+  <ion-list class="background">
+    <ion-item class="background" no-lines *ngFor="let wifi of data " >
       <ion-avatar item-start>
       </ion-avatar >
-      <p  >{{wifi.SSID}}</p>  
-      <p  >{{wifi.BSSID}}</p>  
-      <p  >{{wifi.level}}</p>
+      <p><strong>SSID:</strong> {{wifi.SSID}}</p>  
+      <p><strong>MAC:</strong> {{wifi.BSSID}}</p>  
+      <p><strong>RSSI:</strong> {{wifi.level}}</p>
     </ion-item>
   </ion-list>
 </ion-content>

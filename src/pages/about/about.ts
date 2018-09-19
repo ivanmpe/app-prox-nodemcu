@@ -12,7 +12,9 @@ export class AboutPage {
   public redes = []
 
   constructor(public navCtrl: NavController, private hotspot: Hotspot) {
-
+    setInterval(() => { 
+      this.rescan(); 
+   }, 3000);
   }
   ionViewDidLoad() {
     this.rescan();

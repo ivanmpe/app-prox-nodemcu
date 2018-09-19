@@ -3,7 +3,6 @@ import {  NavController, Platform } from 'ionic-angular';
 import { Hotspot, HotspotNetwork } from '@ionic-native/hotspot';
 import { Paho } from 'ng2-mqtt/mqttws31';
 import { ToastController } from 'ionic-angular';
-import { interval } from 'rxjs/observable/interval';
 
 @Component({
   selector: 'page-home',
@@ -15,7 +14,8 @@ export class HomePage {
   data = [];
   levelNodemcu1;
   public redes = []
-  sub;
+  status: String = "MQTT DISCONECTADO"
+  statusMqtt: Boolean = false;
   host = 'm13.cloudmqtt.com';
   path = '/mqtt';
   port = 33728;
@@ -50,6 +50,8 @@ export class HomePage {
 
   onConnected() {
     this.subscribe();
+    this.statusMqtt = true;
+    this.status = "MQTT CONECTADO"
     this.presentToast('mqtt conectado');
   }
 
@@ -61,18 +63,11 @@ export class HomePage {
 
 
   onMessage() {
-
-    this.client.onMessageArrived = (message: Paho.MQTT.Message) => {
+      this.client.onMessageArrived = (message: Paho.MQTT.Message) => {
       console.log("Message Arrived: " + message.payloadString);
       console.log("Topic: " + message.destinationName);
       console.log("QoS: " + message.qos);
       console.log("Retained: " + message.retained);
-
-      if (message.destinationName == 'sensor/temperatura') {
-      //  this.temperatura = message.payloadString
-      } else if (message.destinationName == 'sensor/umidade') {
-      //  this.umidade = message.payloadString
-      }
     };
   }
 
@@ -82,6 +77,8 @@ export class HomePage {
       this.presentToast('Connection lost : ' + JSON.stringify(responseObject));
       console.log('Connection lost : ' + JSON.stringify(responseObject));
     };
+    this.status = "MQTT DISCONECTADO";  
+    this.statusMqtt = false;
   }
 
   presentToast(msg: string) {
@@ -113,18 +110,7 @@ export class HomePage {
 
     })
 
-
-    /*
-     hotspot.startWifiPeriodicallyScan(3000, Number.MAX_SAFE_INTEGER).then((data) => {
-      this.rescan();
-    }, (error) => {
-      console.log(".........hotspot..........", error);
-    })*/
-  
-
-
   }
-
 
 
 }

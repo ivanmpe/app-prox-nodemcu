@@ -1,15 +1,15 @@
 <ion-header>
-    <ion-navbar>
-      <ion-title>
-        Proximidade ESP8266
-      </ion-title>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content>
-    
-    <p> Nodemcu1 : {{levelNodemcu1}}</p>
-   <!--    <p> Distancia : {{distancia}}</p>
+  <ion-navbar color="tab">
+    <ion-title>
+      Proximidade ESP8266
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="background">
+  <button ion-button [color]="statusMqtt ? 'secondary' : 'danger' " color="secondary"> {{status}} </button >
+  <p> NODEMCU1 : {{levelNodemcu1}}</p>
+  <!--    <p> Distancia : {{distancia}}</p>
 
   <ion-list >
       <ion-item no-lines *ngFor="let wifi of data " >
@@ -19,5 +19,5 @@
         <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'" >{{wifi.BSSID}}</p>  
         <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'"  >{{wifi.level}}</p>
       </ion-item>
-    </ion-list> --> 
-  </ion-content>
+    </ion-list> -->
+</ion-content>
