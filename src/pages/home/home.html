@@ -7,17 +7,9 @@
 </ion-header>
 
 <ion-content class="background">
-  <button ion-button [color]="statusMqtt ? 'secondary' : 'danger' " color="secondary"> {{status}} </button >
-  <p> NODEMCU1 : {{levelNodemcu1}}</p>
-  <!--    <p> Distancia : {{distancia}}</p>
-
-  <ion-list >
-      <ion-item no-lines *ngFor="let wifi of data " >
-        <ion-avatar item-start>
-        </ion-avatar >
-        <p  *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'" >{{wifi.SSID}}</p>  
-        <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'" >{{wifi.BSSID}}</p>  
-        <p *ngIf="wifi.BSSID == '2e:3a:e8:08:e9:d0'"  >{{wifi.level}}</p>
-      </ion-item>
-    </ion-list> -->
+  <div class="centrohome">
+    <button ion-button [color]="statusMqtt ? 'secondary' : 'danger' " color="secondary"> {{status}} </button>
+    <p> <strong>NODEMCU1 </strong> : {{levelNodemcu1}}</p>
+    <p> <strong> Distancia Aproximada</strong> : {{distanceNodemcu1}} Metros</p>
+  </div>
 </ion-content>

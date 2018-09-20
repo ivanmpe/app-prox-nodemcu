@@ -11,29 +11,32 @@ import { ToastController } from 'ionic-angular';
 export class HomePage {
 
 
-  data = [];
-  levelNodemcu1;
-  public redes = []
+ 
+  client;
   status: String = "MQTT DISCONECTADO"
   statusMqtt: Boolean = false;
   host = 'm13.cloudmqtt.com';
   path = '/mqtt';
   port = 33728;
-  client;
-  level1: any;
-  distancia: number 
-
+  
   options = {
     useSSL: true,
     userName: "xmvxeajy",
     password: "_rdhkvlq9-aB",
     onSuccess: this.onConnected.bind(this)
   }
+
+  data = [];
+  levelNodemcu1: number;
+  distanceNodemcu1: number =0; 
+
+ 
+
   constructor(private platform: Platform, public navCtrl: NavController, private hotspot: Hotspot,
     public toastCtrl: ToastController) {
       setInterval(() => { 
         this.rescan(); 
-     }, 3000);
+     }, 2000);
     }
 
   ionViewDidLoad() {
@@ -97,15 +100,18 @@ export class HomePage {
       var i: number;
       for (i = 0; i < this.data.length - 1; i++) {
         if (this.data[i].BSSID == '2e:3a:e8:08:e9:d0') {
-          this.levelNodemcu1 = this.data[i].level
-      
-          if (this.levelNodemcu1 > -70) {
-            this.sendMessage("0");
-          } else {
+         
+          this.levelNodemcu1 =parseFloat(this.data[i].level);
+          this.distanceNodemcu1 = Math.pow(10,((-54-(this.levelNodemcu1))/(10*2)));
+          this.distanceNodemcu1 = parseFloat(this.distanceNodemcu1.toFixed(2))
+
+          if (this.distanceNodemcu1 < 3.00 ) {
             this.sendMessage("1");
+          } else {
+            this.sendMessage("0");
           }
         }
-      }
+    }
       
 
     })

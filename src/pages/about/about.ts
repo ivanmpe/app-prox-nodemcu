@@ -12,9 +12,9 @@ export class AboutPage {
   public redes = []
 
   constructor(public navCtrl: NavController, private hotspot: Hotspot) {
-    setInterval(() => { 
-      this.rescan(); 
-   }, 3000);
+    setInterval(() => {
+      this.rescan();
+    }, 2000);
   }
   ionViewDidLoad() {
     this.rescan();
@@ -23,8 +23,7 @@ export class AboutPage {
     this.hotspot.scanWifiByLevel().then((networks: Array<HotspotNetwork>) => {
 
       this.data = networks;
-
-
+      
     })
   }
 
