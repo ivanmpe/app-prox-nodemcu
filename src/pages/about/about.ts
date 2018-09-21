@@ -21,9 +21,7 @@ export class AboutPage {
   }
   rescan() {
     this.hotspot.scanWifiByLevel().then((networks: Array<HotspotNetwork>) => {
-
       this.data = networks;
-      
     })
   }
 
