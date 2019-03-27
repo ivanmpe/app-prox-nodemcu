@@ -1,6 +1,6 @@
 <h2>Aplicativo</h2>
 
-<p align="center"><img src="https://raw.githubusercontent.com/ivanmpe/app-prox-nodemcu/master/Telas/1.jpeg" width="500" height="300" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/ivanmpe/app-prox-nodemcu/master/Telas/1.jpeg" width="500" height="889" /></p>
 
 </br>
 <h2>Desenvolvimento</h2>
@@ -29,7 +29,7 @@ ESP8266, com intuito de detectar presença de outros
 dispositivos em ambientes internos. </p>
 <br>
 <h2>Esquema</h2>
-<p align="center"><img src="https://raw.githubusercontent.com/ivanmpe/app-prox-nodemcu/master/Telas/esquema.jpeg" width="700" height="450" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/ivanmpe/app-prox-nodemcu/master/Telas/esquema.jpeg" width="500" height="889" /></p>
 
 <h2>Componentes</h2>
 <ul>
